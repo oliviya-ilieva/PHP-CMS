@@ -19,28 +19,7 @@
                        
                         <div class="col-xs-6">
 <?php
-if(isset($_POST['submit'])) {
-$cat_title = $_POST['cat_title'];
-
-if($cat_title == "" || empty($cat_title)) {
-    echo "This field should not be empty";
-}
-
-else {
-    $query = "INSERT INTO categories(cat_title)";
-    $query.= "VALUES('{$cat_title}') ";
-
-    $create_category_query = mysqli_query($connection, $query);
-
-if(!$create_category_query) {
-    die ('QUERY FAILED' . mysqli_error($connection));
-}
-}
-
-
-}
-
-
+insert_categories();
 
 ?>
 
@@ -59,16 +38,24 @@ if(!$create_category_query) {
 
 
                         </form>
+
+                     <?php  
+    if(isset($_GET['edit'])) {
+
+    $cat_id = $_GET['edit'];
+
+    include "includes/update_categories.php";
+    }
+                     
+                     
+                     
+                     ?>
                         </div>
+                        
 
 
                         <div class="col-xs-6">
 
-<?php 
-$query = "SELECT * FROM categories LIMIT 3";
-$select_categories = mysqli_query($connection, $query);
-
-?>
                          <table class="table table-bordered table-hover">
                             <thead>
                                 <tr>
@@ -77,18 +64,13 @@ $select_categories = mysqli_query($connection, $query);
                                 </tr>
                             </thead>
                             <tbody>
-<?php                         while($row = mysqli_fetch_assoc($select_categories)) {
-$cat_id = $row['cat_id'];
-$cat_title = $row['cat_title'];
-   
-    echo "
-    <tr>    
-    <td>{$cat_id}</td>
-    <td>{$cat_title}</td>
-    </tr>";
+<?php                        
+findAllCategories();
+?>
 
+<?php 
 
-                    }
+deleteCategories();
 ?>
                                
                             </tbody>
